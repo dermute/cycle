@@ -6,7 +6,7 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - cycle-data:/data
+      - ./data:/data
     healthcheck:
       test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost/api/periods || exit 1"]
       interval: 30s
