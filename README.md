@@ -1,5 +1,7 @@
 # Cycle
 
+![Cycle calendar screenshot](docs/screenshot.png)
+
 A small, private period calendar. Data is stored in a SQLite database on the server, in the Docker volume `cycle-data`, so every client using the same deployment sees the same calendar.
 
 ## Run locally
