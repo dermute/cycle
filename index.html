@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#fff7f8" />
+    <title>Cycle — simple period calendar</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="Cycle home"><span class="brand-mark">c</span>cycle</a>
+        <button class="text-button" id="todayButton" type="button">Today</button>
+      </header>
+
+      <section class="intro">
+        <p class="eyebrow">YOUR CYCLE, SIMPLIFIED</p>
+        <h1>Know your rhythm.</h1>
+        <p class="lead">Tap any day to log a period. Your pattern stays private, right in this browser.</p>
+      </section>
+
+      <section class="calendar-card" aria-label="Period calendar">
+        <div class="calendar-header">
+          <button class="icon-button" id="previousMonth" type="button" aria-label="Previous month">←</button>
+          <h2 id="monthLabel" aria-live="polite"></h2>
+          <button class="icon-button" id="nextMonth" type="button" aria-label="Next month">→</button>
+        </div>
+        <div class="weekdays" aria-hidden="true">
+          <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+        </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+        <div class="legend">
+          <span><i class="dot period-dot"></i> Period</span>
+          <span><i class="dot forecast-dot"></i> Forecast</span>
+          <span><i class="dot today-dot"></i> Today</span>
+        </div>
+      </section>
+
+      <section class="summary" aria-label="Cycle summary">
+        <article class="stat">
+          <p>Next expected</p>
+          <strong id="nextPeriod">—</strong>
+          <small id="nextPeriodDetail">Log a period to begin</small>
+        </article>
+        <article class="stat">
+          <p>Average cycle</p>
+          <strong id="averageCycle">—</strong>
+          <small>between period starts</small>
+        </article>
+        <article class="stat">
+          <p>Average period</p>
+          <strong id="averagePeriod">—</strong>
+          <small>over last 6 months</small>
+        </article>
+      </section>
+
+      <section class="how-it-works">
+        <div><span class="step">1</span><p><strong>Tap to log</strong><br />Tap again to undo.</p></div>
+        <div><span class="step">2</span><p><strong>See your forecast</strong><br />It adapts from recent cycles.</p></div>
+      </section>
+      <p class="privacy-note">Only stored on this device. Forecasts are estimates, not medical advice.</p>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
