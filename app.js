@@ -1,12 +1,12 @@
-const storageKey = 'cycle-period-days-v1';
 const dateKey = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 const fromKey = key => new Date(`${key}T12:00:00`);
 const dayMs = 86400000;
 const today = () => { const d = new Date(); d.setHours(12,0,0,0); return d; };
-let logged = new Set(JSON.parse(localStorage.getItem(storageKey) || '[]'));
+let logged = new Set();
 let view = new Date(today().getFullYear(), today().getMonth(), 1, 12);
 
-function save() { localStorage.setItem(storageKey, JSON.stringify([...logged].sort())); }
+async function load() { const response = await fetch('/api/periods', {cache:'no-store'}); if (!response.ok) throw new Error('Could not load calendar'); const data = await response.json(); logged = new Set(data.days); render(); }
+async function save() { const response = await fetch('/api/periods', {method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify({days:[...logged].sort()})}); if (!response.ok) { await load(); alert('Could not save your change. Please try again.'); } }
 function groups() {
   const days = [...logged].sort().map(fromKey); const result = [];
   days.forEach(day => { const previous = result.at(-1); if (previous && (day - previous.end) === dayMs) previous.end = day; else result.push({ start:day, end:day }); });
@@ -33,7 +33,7 @@ function renderCalendar() {
   for(let i=0;i<42;i++) { const d = new Date(start.getTime()+i*dayMs); const key = dateKey(d); const ownMonth = d.getMonth()===view.getMonth();
     const b = document.createElement('button'); b.className='day' + (!ownMonth?' outside':'') + (logged.has(key)?' period':'') + (!logged.has(key)&&forecast.has(key)?' forecast':'') + (key===nowKey?' today':'');
     b.type='button'; b.textContent=d.getDate(); b.setAttribute('aria-label', `${d.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'})}${logged.has(key)?', logged period':''}${forecast.has(key)&&!logged.has(key)?', forecast period':''}`);
-    b.onclick=()=>{ logged.has(key) ? logged.delete(key) : logged.add(key); save(); render(); }; grid.appendChild(b);
+    b.onclick=()=>{ logged.has(key) ? logged.delete(key) : logged.add(key); render(); save(); }; grid.appendChild(b);
   }
 }
 function renderSummary() { const info=cycleInfo(); const next=info.predictions.find(d=>d>=today()); document.getElementById('averageCycle').textContent=info.periods.length>1?`${info.cycleLength} days`:'—'; document.getElementById('averagePeriod').textContent=info.periods.length?`${info.periodLength} days`:'—'; document.getElementById('nextPeriod').textContent=next?next.toLocaleDateString(undefined,{month:'short',day:'numeric'}):'—'; document.getElementById('nextPeriodDetail').textContent=next?`in ${Math.round((next-today())/dayMs)} days · estimate`:'Log a period to begin'; }
@@ -41,4 +41,4 @@ function render(){ renderCalendar(); renderSummary(); }
 document.getElementById('previousMonth').onclick=()=>{view.setMonth(view.getMonth()-1);renderCalendar();};
 document.getElementById('nextMonth').onclick=()=>{view.setMonth(view.getMonth()+1);renderCalendar();};
 document.getElementById('todayButton').onclick=()=>{const d=today();view=new Date(d.getFullYear(),d.getMonth(),1,12);renderCalendar();};
-render();
+load().catch(() => { document.getElementById('nextPeriodDetail').textContent = 'Could not reach the calendar server'; render(); });
