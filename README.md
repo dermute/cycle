@@ -65,3 +65,8 @@ This project was developed with AI assistance.
     </svg>
   </div>
 </div>
+
+
+## License
+
+MIT - see [LICENSE](LICENSE).
