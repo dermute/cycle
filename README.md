@@ -1,8 +1,8 @@
 # Cycle
 
-![Cycle calendar screenshot](docs/screenshot.png)
+![Cycle demo: log period dates, undo a tap, and see the next estimated forecast](docs/cycle-promo.gif)
 
-A small, private period calendar. Data is stored in a SQLite database on the server at `./data/cycle.db`, so every client using the same deployment sees the same calendar.
+A small, self-hosted, private period calendar. Data is stored in a SQLite database on the server at `./data/cycle.db`, so every client using the same deployment sees the same calendar.
 
 ## Run locally
 
