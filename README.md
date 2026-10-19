@@ -6,13 +6,20 @@ A small, self-hosted, private period calendar. Data is stored in a SQLite databa
 
 ## Run locally
 
+Install Git and Docker with the Docker Compose plugin, then clone the repository and start the published image:
+
 ```sh
+git clone https://github.com/dermute/cycle.git
+cd cycle
+docker compose pull
 docker compose up -d
 ```
 
-Open `http://localhost:8080`. Back up the `data/` directory to preserve the calendar. There is deliberately no authentication, so expose this deployment only on a trusted private network or behind your own access control.
+Open `http://localhost:8080`. The Compose file runs `ghcr.io/dermute/cycle:latest`; it does not build the local source. Calendar data is stored at `./data/cycle.db` in the cloned repository and mounted at `/data/cycle.db` inside the container.
 
-The GitHub workflow builds and publishes `ghcr.io/<owner>/cycle:latest` on pushes to `main`, manually, and every Monday. For use on multiple devices, access this same container via its private-network address or a reverse proxy.
+To update, run `docker compose pull` followed by `docker compose up -d` from the same directory. To stop, run `docker compose down`; the `data/` directory is preserved.
+
+Back up the `data/` directory while the container is stopped to preserve the calendar. There is deliberately no authentication, and the default port mapping exposes port 8080 on all host interfaces, so use a trusted private network or your own access control. For multiple devices, access the same deployment via its private-network address or a reverse proxy.
 
 ## AI attribution
 
